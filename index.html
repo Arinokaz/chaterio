@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>chaterio — P2P видеозвонок</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <h1>chaterio</h1>
+    <p class="subtitle">P2P видеозвонок без серверов · WebRTC</p>
+  </header>
+
+  <main id="app">
+    <section id="view-idle" class="view active">
+      <div class="role-buttons">
+        <button id="btn-create" class="primary">Создать звонок</button>
+        <button id="btn-join">Присоединиться</button>
+      </div>
+      <p class="legend">
+        Один нажимает «Создать звонок», другой — «Присоединиться».
+        Дальше обменяетесь двумя кодами через любой мессенджер.
+      </p>
+    </section>
+
+    <section id="view-create" class="view">
+      <h2>1. Отправь это другу</h2>
+      <p class="hint">Скопируй код и передай его любым способом (Telegram, почта, SMS).</p>
+      <textarea id="invite-code" readonly rows="3" aria-label="Код приглашения"></textarea>
+
+      <h2>2. Вставь ответ от друга</h2>
+      <p class="hint">Когда друг пришлёт ответный код — вставь его сюда и нажми кнопку.</p>
+      <textarea id="answer-input" rows="3" placeholder="Вставь ответный код..." aria-label="Ответный код"></textarea>
+      <div class="row">
+        <button id="btn-accept-answer" class="primary">Подключиться</button>
+      </div>
+      <button class="back-btn" data-back>← Отмена</button>
+    </section>
+
+    <section id="view-join" class="view">
+      <h2>Вставь код приглашения</h2>
+      <textarea id="invite-input" rows="3" placeholder="Вставь код от друга..." aria-label="Код приглашения"></textarea>
+      <div class="row">
+        <button id="btn-accept-invite" class="primary">Создать ответ</button>
+      </div>
+      <button class="back-btn" data-back>← Отмена</button>
+    </section>
+
+    <section id="view-share-answer" class="view">
+      <h2>Отправь это инициатору</h2>
+      <p class="hint">Скопируй этот ответный код и передай обратно тому, кто тебя позвал.</p>
+      <textarea id="answer-code" readonly rows="3" aria-label="Ответный код"></textarea>
+      <p class="hint">Ждём подключения — этот экран закроется автоматически.</p>
+      <button class="back-btn" data-back>← Отмена</button>
+    </section>
+
+    <section id="view-call" class="view">
+      <div class="video-grid">
+        <video id="remote-video" autoplay playsinline></video>
+        <video id="local-video" autoplay playsinline muted></video>
+      </div>
+      <div class="controls">
+        <button id="btn-mute" class="ctrl">Mute</button>
+        <button id="btn-camera" class="ctrl">Камера</button>
+        <button id="btn-hangup" class="ctrl hangup">Завершить</button>
+      </div>
+    </section>
+  </main>
+
+  <div id="status" class="status" role="status"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

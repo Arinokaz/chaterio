@@ -1,0 +1,83 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "lsp": true,
+  "permission": {
+    "*": "ask",
+    "glob": "allow",
+    "read": "allow",
+    "grep": "allow",
+    "todowrite": "allow",
+    "websearch": "ask",
+    "webfetch": "ask",
+    "doom_loop": "ask",
+    "edit": {
+      "*": "ask"
+    },
+    "lsp": "allow",
+    "bash": {
+      "*": "ask",
+      "git *": "ask",
+      "git status": "allow",
+      "git status *": "allow",
+      "git diff": "allow",
+      "git diff *": "allow",
+      "git log": "allow",
+      "git log *": "allow",
+      "git push": "deny",
+      "git push *": "deny",
+      "git pull": "deny",
+      "git pull *": "deny",
+      "git remote": "deny",
+      "git remote *": "deny",
+      "ls *": "allow",
+      "wc *": "allow",
+      "cat *": "allow",
+      "head *": "allow",
+      "echo *": "allow",
+      "tail *": "allow",
+      "find *": "allow",
+      "grep *": "allow",
+      "sort *": "allow",
+      "pwd": "allow",
+      "rm *": "deny"
+    },
+    "skill": "ask"
+  },
+  "model": "minimax-coding-plan/MiniMax-M2.7",
+  "agent": {
+    "build": {
+      "mode": "primary",
+      "model": "minimax-coding-plan/MiniMax-M3"
+    },
+    "plan": {
+      "mode": "primary",
+      "model": "zai-coding-plan/glm-5.2"
+    },
+    "base": {
+      "mode": "primary",
+      "model": "minimax-coding-plan/MiniMax-M2.7",
+      "tools": {
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "ls": true,
+        "write": false,
+        "edit": false,
+        "bash": false
+      }
+    },
+    "pro": {
+      "mode": "primary",
+      "model": "zai-coding-plan/glm-5.2",
+      "tools": {
+        "read": true,
+        "glob": true,
+        "grep": true,
+        "ls": true,
+        "write": true,
+        "edit": true,
+        "bash": true
+      }
+    }
+  }
+}
