@@ -2,7 +2,8 @@
 <html lang="ru">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#0f1115">
   <title>chaterio — P2P видеозвонок</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -14,23 +15,65 @@
 
   <main id="app">
     <section id="view-idle" class="view active">
+      <button id="btn-settings" class="icon-btn top-right" aria-label="Настройки устройств">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </button>
       <div class="role-buttons">
         <button id="btn-create" class="primary">Создать звонок</button>
         <button id="btn-join">Присоединиться</button>
       </div>
       <p class="legend">
         Один нажимает «Создать звонок», другой — «Присоединиться».
-        Дальше обменяетесь двумя кодами через любой мессенджер.
+        Дальше обменяетесь двумя кодами через мессенджер.
       </p>
+    </section>
+
+    <section id="view-settings" class="view">
+      <h2>Устройства</h2>
+      <div class="preview-wrap" id="preview-wrap">
+        <video id="settings-preview" autoplay playsinline muted></video>
+      </div>
+
+      <div class="field">
+        <label for="sel-camera">Камера</label>
+        <select id="sel-camera"></select>
+      </div>
+      <div class="field">
+        <label for="sel-mic">Микрофон</label>
+        <select id="sel-mic"></select>
+      </div>
+      <div class="field" id="field-speaker" hidden>
+        <label for="sel-speaker">Динамик</label>
+        <select id="sel-speaker"></select>
+      </div>
+
+      <div class="row">
+        <button id="btn-settings-done" class="primary">Готово</button>
+      </div>
+      <button class="back-btn" data-back>← Назад</button>
     </section>
 
     <section id="view-create" class="view">
       <h2>1. Отправь это другу</h2>
-      <p class="hint">Скопируй код и передай его любым способом (Telegram, почта, SMS).</p>
-      <textarea id="invite-code" readonly rows="3" aria-label="Код приглашения"></textarea>
+      <div class="code-display">
+        <div class="code-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+            <polyline points="16 6 12 2 8 6"/>
+            <line x1="12" y1="2" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <div class="code-status">Код приглашения готов</div>
+        <div class="code-actions">
+          <button id="btn-copy-invite">Скопировать</button>
+          <button id="btn-share-invite" class="primary">Отправить</button>
+        </div>
+      </div>
 
       <h2>2. Вставь ответ от друга</h2>
-      <p class="hint">Когда друг пришлёт ответный код — вставь его сюда и нажми кнопку.</p>
       <textarea id="answer-input" rows="3" placeholder="Вставь ответный код..." aria-label="Ответный код"></textarea>
       <div class="row">
         <button id="btn-accept-answer" class="primary">Подключиться</button>
@@ -48,10 +91,22 @@
     </section>
 
     <section id="view-share-answer" class="view">
-      <h2>Отправь это инициатору</h2>
-      <p class="hint">Скопируй этот ответный код и передай обратно тому, кто тебя позвал.</p>
-      <textarea id="answer-code" readonly rows="3" aria-label="Ответный код"></textarea>
-      <p class="hint">Ждём подключения — этот экран закроется автоматически.</p>
+      <h2>Отправь ответ инициатору</h2>
+      <div class="code-display">
+        <div class="code-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
+            <polyline points="16 6 12 2 8 6"/>
+            <line x1="12" y1="2" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <div class="code-status">Ответный код готов</div>
+        <div class="code-actions">
+          <button id="btn-copy-answer">Скопировать</button>
+          <button id="btn-share-answer" class="primary">Отправить</button>
+        </div>
+      </div>
+      <p class="hint center">Ждём подключения — этот экран закроется автоматически.</p>
       <button class="back-btn" data-back>← Отмена</button>
     </section>
 
@@ -63,7 +118,52 @@
       <div class="controls">
         <button id="btn-mute" class="ctrl">Mute</button>
         <button id="btn-camera" class="ctrl">Камера</button>
+        <button id="btn-flip" class="ctrl ctrl-icon" aria-label="Переключить камеру" hidden>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <path d="M11 19H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5"/>
+            <path d="M13 13a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+            <path d="m16 3 4 4-4 4"/>
+            <path d="M20 7H9"/>
+            <path d="M13 21H20a2 2 0 0 0 2-2v-5"/>
+            <path d="m11 21-4-4 4-4"/>
+            <path d="M4 17h11"/>
+          </svg>
+        </button>
+        <button id="btn-speaker" class="ctrl ctrl-icon" aria-label="Громкая связь" hidden>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"/>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"/>
+          </svg>
+        </button>
+        <button id="btn-devices" class="ctrl">Устройства</button>
         <button id="btn-hangup" class="ctrl hangup">Завершить</button>
+      </div>
+
+      <div id="device-panel" class="device-panel" hidden>
+        <div class="device-panel-inner" role="dialog" aria-label="Смена устройств">
+          <div class="device-panel-head">
+            <h3>Устройства</h3>
+            <button id="btn-devices-close" class="icon-btn" aria-label="Закрыть">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <line x1="18" y1="6" x2="6" y2="18"/>
+                <line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+          <div class="field">
+            <label for="sel-camera-call">Камера</label>
+            <select id="sel-camera-call"></select>
+          </div>
+          <div class="field">
+            <label for="sel-mic-call">Микрофон</label>
+            <select id="sel-mic-call"></select>
+          </div>
+          <div class="field" id="field-speaker-call" hidden>
+            <label for="sel-speaker-call">Динамик</label>
+            <select id="sel-speaker-call"></select>
+          </div>
+        </div>
       </div>
     </section>
   </main>
